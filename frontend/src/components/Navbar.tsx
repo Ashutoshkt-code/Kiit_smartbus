@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Bus, Menu, X, MapPin, Users, Calendar, Shield, HelpCircle, LogIn, UserPlus, LogOut } from 'lucide-react';
+import { Bus, Menu, X, MapPin, Users, Calendar, Shield, HelpCircle, LogIn, UserPlus, LogOut, UserCircle } from 'lucide-react';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,9 +14,16 @@ const Navbar = () => {
     { path: '/live-tracker', label: 'Live Bus Tracker', icon: MapPin },
     { path: '/seat-availability', label: 'Seat Availability', icon: Users },
     { path: '/route-schedule', label: 'Route & Schedule', icon: Calendar },
-    { path: '/admin', label: 'Admin Panel', icon: Shield },
+    { path: '/profile', label: 'Profile', icon: UserCircle, requiresAuth: true },
+    { path: '/admin', label: 'Admin Panel', icon: Shield, requiresAdmin: true },
     { path: '/contact', label: 'Contact / Help', icon: HelpCircle },
   ];
+
+  const filteredNavItems = navItems.filter((item) => {
+    if (item.requiresAdmin && user?.role !== 'ADMIN') return false;
+    if (item.requiresAuth && !isAuthenticated) return false;
+    return true;
+  });
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -59,7 +66,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
-            {navItems.map(({ path, label, icon: Icon }) => (
+            {filteredNavItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
                 to={path}
@@ -123,7 +130,7 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-200">
             <div className="space-y-2">
-              {navItems.map(({ path, label, icon: Icon }) => (
+              {filteredNavItems.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
                   to={path}

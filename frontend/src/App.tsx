@@ -9,6 +9,7 @@ import Contact from './pages/Contact'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import ProfilePage from './pages/ProfilePage'
+import AdminPage from './pages/AdminPage'
 
 export default function App() {
   return (
@@ -97,7 +98,7 @@ export default function App() {
           <div className="min-h-screen bg-gray-50 flex flex-col">
             <Navbar />
             <main className="flex-grow">
-              <Home />
+              <AdminPage />
             </main>
             <Footer />
           </div>
